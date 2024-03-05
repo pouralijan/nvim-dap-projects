@@ -1,5 +1,6 @@
 local M = {}
 
+M.default_path = "./.nvim/nvim-dap.lua"
 M.config_paths = { "./.nvim-dap/nvim-dap.lua", "./.nvim-dap.lua", "./.nvim/nvim-dap.lua" }
 
 function M.search_project_config()
@@ -21,16 +22,40 @@ function M.search_project_config()
 		end
 	end
 	if project_config == "" then
+
+
 		return
 	end
 	vim.notify("[nvim-dap-projects] Found nvim-dap configuration at." .. project_config, vim.log.levels.INFO, nil)
-	require("dap").adapters = (function()
-		return {}
-	end)()
-	require("dap").configurations = (function()
-		return {}
-	end)()
+	-- local local_config = dofile(project_config)
+	-- if local_config == nil then
+	-- 	return
+	-- else
+	-- 	if local_config.adapters ~= nil then
+	-- 		local adapters = vim.tbl_deep_extend("force", require("dap").adapters, local_config.adapters)
+	--      require("dap").adapters = adapters
+	-- 	end
+	--    if local_config.configuration ~= nil then
+	--      local local_configurations = local_config.configurations
+	--      local global_configurations = require("dap").configurations
+	--      for key, local_list in pairs(local_configurations) do
+	--        local global_list = global_configurations[key]
+	--        if global_list ~= nil then
+	--          vim.list_extend(local_list, global_list)
+	--        end
+	--        local_configurations[key] = local_list
+	--      end
+	--      local_configurations = vim.tbl_deep_extend('keep', local_configurations, global_configurations)
+	--      require('dap').configurations = local_configurations
+	--    end
+	-- end
 	vim.cmd(":luafile " .. project_config)
+	-- require("dap").adapters = (function()
+	-- 	return {}
+	-- end)()
+	-- require("dap").configurations = (function()
+	-- 	return {}
+	-- end)()
 end
 
 return M
